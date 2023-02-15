@@ -1,0 +1,23 @@
+{{- $redisHost := include "sentry.redis.host" . -}}
+{{- $redisPort := include "sentry.redis.port" . -}}
+{{- $redisPass := include "sentry.redis.password" . -}}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ template "sentry.fullname" . }}
+  labels:
+    app: sentry
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}"
+    release: "{{ .Release.Name }}"
+    heritage: "{{ .Release.Service }}"
+data:
+  config.yml: |-
+    relay:
+      {{- if .Values.relay.mode }}
+      mode: {{ .Values.relay.mode }}
+      {{- end }}
+      upstream: "{{ .Values.upstream.host }}"
+      host: 0.0.0.0
+      port: {{ template "relay.port" }}
+
+{{ .Values.config.relay | indent 4 }}

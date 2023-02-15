@@ -1,0 +1,149 @@
+NAME: dossierdata-support
+LAST DEPLOYED: Wed Feb 15 10:53:47 2023
+NAMESPACE: dossierdata-support-sentry
+STATUS: pending-install
+REVISION: 1
+TEST SUITE: None
+HOOKS:
+---
+# Source: sentry-relay/templates/deployment-relay.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: dossierdata-support-sentry-relay
+  labels:
+    app: dossierdata-support-sentry-relay
+    chart: "sentry-relay-15.2.1"
+    release: "dossierdata-support"
+    heritage: "Helm"
+    app.kubernetes.io/managed-by: "Helm"
+  annotations:
+    meta.helm.sh/release-name: "dossierdata-support"
+    meta.helm.sh/release-namespace: "dossierdata-support-sentry"
+    "helm.sh/hook": "post-install,post-upgrade"
+    "helm.sh/hook-weight": "25"
+spec:
+  selector:
+    matchLabels:
+      app: dossierdata-support-sentry-relay
+      release: "dossierdata-support"
+      role: relay
+  replicas: 1
+  revisionHistoryLimit: 10
+  template:
+    metadata:
+      annotations:
+        checksum/relay: 8074a66c015a8309dc9bdef7524b89bb223749847663f454012dba4e7ed06cc3
+        checksum/config.yaml: 00e7bc42f2b329c5f3a3d4c949749f44b212e2f050010ca64874bc65ef3c8bd4
+      labels:
+        app: dossierdata-support-sentry-relay
+        release: "dossierdata-support"
+        role: relay
+    spec:
+      affinity:
+      initContainers:
+        - name: sentry-relay-init
+          image: "getsentry/relay:22.8.0"
+          imagePullPolicy: IfNotPresent
+          args:
+            - "credentials"
+            - "generate"
+          env:
+            - name: RELAY_PORT
+              value: '3000'
+          volumeMounts:
+            - name: credentials
+              mountPath: /work/.relay
+            - name: config
+              mountPath: /work/.relay/config.yml
+              subPath: config.yml
+              readOnly: true
+      containers:
+        - name: sentry-relay
+          image: "getsentry/relay:22.8.0"
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 3000
+          env:
+            - name: RELAY_PORT
+              value: '3000'
+          volumeMounts:
+            - name: credentials
+              mountPath: /work/.relay
+            - name: config
+              mountPath: /work/.relay/config.yml
+              subPath: config.yml
+              readOnly: true
+          livenessProbe:
+            failureThreshold: 5
+            httpGet:
+              path: /api/relay/healthcheck/live/
+              port: 3000
+              scheme: HTTP
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 2
+          readinessProbe:
+            failureThreshold: 5
+            httpGet:
+              path: /api/relay/healthcheck/ready/
+              port: 3000
+              scheme: HTTP
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 2
+          resources:
+            {}
+      volumes:
+        - name: config
+          configMap:
+            name: dossierdata-support-sentry-relay
+            defaultMode: 0644
+        - name: credentials
+          emptyDir: {}
+MANIFEST:
+---
+# Source: sentry-relay/templates/configmap-relay.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: dossierdata-support-sentry-relay
+  labels:
+    app: sentry
+    chart: "sentry-relay-15.2.1"
+    release: "dossierdata-support"
+    heritage: "Helm"
+data:
+  config.yml: |-
+    relay:
+      mode: proxy
+      upstream: "https://sentry.ddat.io/"
+      host: 0.0.0.0
+      port: 3000
+
+    # No YAML relay config given
+---
+# Source: sentry-relay/templates/service-relay.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: dossierdata-support-sentry-relay
+  annotations:
+  labels:
+    app: dossierdata-support-sentry-relay
+    chart: "sentry-relay-15.2.1"
+    release: "dossierdata-support"
+    heritage: "Helm"
+spec:
+  type: ClusterIP
+  ports:
+  - port: 3000
+    targetPort: 3000
+    protocol: TCP
+    name: sentry
+  selector:
+    app: dossierdata-support-sentry-relay
+    role: relay
+
