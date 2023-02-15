@@ -3,19 +3,19 @@
 ## Add repo
 
 ```
-helm repo add sentry https://sentry-kubernetes.github.io/charts
+helm repo add sentry-relay https://dossierdata.github.io/sentry-relay
 ```
 
 ## Without overrides
 
 ```
-helm install sentry sentry/sentry
+helm install sentry-relay sentry-relay
 ```
 
 ## With your own values file
 
 ```
-helm install sentry sentry/sentry -f values.yaml
+helm install sentry-relay sentry-relay -f values.yaml
 ```
 
 # Upgrade
