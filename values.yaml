@@ -1,7 +1,7 @@
 prefix:
 
 upstream:
-  host: "https://sentry.ddat.io/"
+  host: "https://sentry.io/"
 
 user:
   create: true
@@ -352,7 +352,7 @@ filestore:
   gcs: { }
     ## Point this at a pre-configured secret containing a service account. The resulting
     ## secret will be mounted at /var/run/secrets/google
-    # secretName:
+  # secretName:
   # credentialsFile: credentials.json
   # bucketName:
 
@@ -557,7 +557,7 @@ rabbitmq:
   resources: { }
   memoryHighWatermark: { }
     # enabled: true
-    # type: relative
+  # type: relative
   # value: 0.4
 
   extraSecrets:
