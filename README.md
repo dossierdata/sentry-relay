@@ -9,13 +9,13 @@ helm repo add sentry-relay https://dossierdata.github.io/sentry-relay
 ## Without overrides
 
 ```
-helm install sentry-relay sentry-relay
+helm install sentry-relay sentry-relay/sentry-relay
 ```
 
 ## With your own values file
 
 ```
-helm install sentry-relay sentry-relay -f values.yaml
+helm install sentry-relay sentry-relay/sentry-relay -f values.yaml
 ```
 
 # Upgrade
