@@ -78,30 +78,15 @@ relay:
   sidecars: [ ]
   volumes: [ ]
 
-  projects_whitelist: true
+  projects_whitelist: false
 
   projects:
-    2: |-
+    1: |-
       {
-        "slug": "core",
+        "slug": "example",
         "publicKeys": [
           {
-            "publicKey": "7f9efe5559924c62a91294643885fff6",
-            "isEnabled": true
-          }
-        ],
-        "config": {
-          "allowedDomains": [
-            "*"
-          ]
-        }
-      }
-    8: |-
-      {
-        "slug": "core",
-        "publicKeys": [
-          {
-            "publicKey": "7f9efe5559924c62a91294643885fff6",
+            "publicKey": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
             "isEnabled": true
           }
         ],
@@ -351,7 +336,7 @@ filestore:
 
   gcs: { }
     ## Point this at a pre-configured secret containing a service account. The resulting
-    ## secret will be mounted at /var/run/secrets/google
+  ## secret will be mounted at /var/run/secrets/google
   # secretName:
   # credentialsFile: credentials.json
   # bucketName:
@@ -556,7 +541,7 @@ rabbitmq:
     enabled: true
   resources: { }
   memoryHighWatermark: { }
-    # enabled: true
+  # enabled: true
   # type: relative
   # value: 0.4
 
