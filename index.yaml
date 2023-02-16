@@ -5,7 +5,7 @@ entries:
       category: Infrastructure
     apiVersion: v2
     appVersion: 1.22.0
-    created: "2023-02-15T18:06:55.198161234+01:00"
+    created: "2023-02-16T15:09:33.388194992+01:00"
     dependencies:
     - name: common
       repository: https://charts.bitnami.com/bitnami
@@ -36,14 +36,19 @@ entries:
     version: 12.0.4
   sentry-relay:
   - apiVersion: v2
-    appVersion: "1.0"
-    created: "2023-02-15T18:06:55.200663633+01:00"
+    appVersion: 22.8.0
+    created: "2023-02-16T15:09:33.396157478+01:00"
+    dependencies:
+    - condition: nginx.enabled
+      name: nginx
+      repository: https://charts.bitnami.com/bitnami
+      version: 12.0.4
     description: A Helm chart for the Sentry Relay
-    digest: 85cf6d984c1f0a1b430d31eee1fe910ab809971d940d4d20f5d2b5a8be8c4365
+    digest: 24cae31ae425b66ce41a9db6d640bd34a32e7536b47711e887f7b14a678c0ad0
     maintainers:
     - name: dossierdata
     name: sentry-relay
     urls:
     - charts/sentry-relay-1.0.0.tgz
     version: 1.0.0
-generated: "2023-02-15T18:06:55.196460011+01:00"
+generated: "2023-02-16T15:09:33.386380641+01:00"
